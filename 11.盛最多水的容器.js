@@ -9,42 +9,76 @@
  * @param {number[]} height
  * @return {number}
  */
+// var maxArea = function (height) {
+//   const maxIdx = height.length - 1;
+
+//   if (maxIdx === 1) return height[0] * height[1];
+//   if (maxIdx === 2)
+//     return Math.max(height[0] * height[1], height[0] * height[2], height[1] * height[2]);
+
+//   let ret = 0;
+//   for (let i = 0; i < maxIdx / 2 - 1; i++) {
+//     const i2 = maxIdx - i;
+//     const diffX1 = i2 - i;
+//     const diffX2 = diffX1 - 1;
+//     const diffX3 = diffX1 - 2;
+
+//     const h1 = height[i] < height[i2] ? height[i] : height[i2];
+//     const h2 = height[i] < height[i2 - 1] ? height[i] : height[i2 - 1];
+//     const h3 = height[i + 1] < height[i2] ? height[i + 1] : height[i2];
+//     const h4 = height[i + 1] < height[i2 - 1] ? height[i + 1] : height[i2 - 1];
+
+//     ret = Math.max(ret, diffX1 * h1, diffX2 * h2, diffX2 * h3, diffX3 * h4);
+//   }
+
+//   return ret;
+// };
+
+// var maxArea = function (height) {
+//   const maxIdx = height.length - 1;
+
+//   if (maxIdx === 1) {
+//     return height[0] < height[1] ? height[0] : height[1];
+//   }
+//   if (maxIdx === 2) {
+//     const h1 = height[0] < height[1] ? height[0] : height[1];
+//     const h2 = height[0] < height[2] ? height[0] : height[2];
+//     const h3 = height[1] < height[2] ? height[1] : height[2];
+//     return Math.max(h1, h2 * 2, h3);
+//   }
+
+//   let ret = 0;
+//   for (let i = 0; i < maxIdx / 2 - 1; i++) {
+//     const i2 = maxIdx - i;
+//     const diffX1 = i2 - i;
+//     const diffX2 = diffX1 - 1;
+//     const diffX3 = diffX1 - 2;
+
+//     const h1 = height[i] < height[i2] ? height[i] : height[i2];
+//     const h2 = height[i] < height[i2 - 1] ? height[i] : height[i2 - 1];
+//     const h3 = height[i + 1] < height[i2] ? height[i + 1] : height[i2];
+//     const h4 = height[i + 1] < height[i2 - 1] ? height[i + 1] : height[i2 - 1];
+
+//     ret = Math.max(ret, diffX1 * h1, diffX2 * h2, diffX2 * h3, diffX3 * h4);
+//   }
+
+//   return ret;
+// };
+
 var maxArea = function (height) {
   const maxIdx = height.length - 1;
-
-  if (maxIdx === 1) return height[0] * height[1];
-
   let ret = 0;
-  // let x1, x2;
-  for (let i = 0; i < maxIdx / 2 - 1; i++) {
-    x1 = i;
-    x2 = maxIdx - i;
-    diffX1 = x2 - x1;
-    diffX2 = diffX1 - 1;
-    diffX3 = diffX1 - 2;
-
-    const h1 = height[x1] > height[x2] ? height[x1] : height[x2];
-    const h2 = height[x1] > height[x2 - 1] ? height[x1] : height[x2 - 1];
-    const h3 = height[x1 + 1] > height[x2] ? height[x1 + 1] : height[x2];
-    const h4 = height[x1 + 1] > height[x2 - 1] ? height[x1 + 1] : height[x2 - 1];
-
-    const arr = [
-      ret,
-      diffX1 * h1,
-      diffX2 * h2,
-      diffX2 * h3,
-      diffX3 * h4,
-      // height[x1] * height[x2],
-      // height[x1] * height[x2 - 1],
-      // height[x1 + 1] * height[x2],
-      // height[x1 + 1] * height[x2 - 1],
-    ];
-    console.log(`🚀 ~ maxArea ~ arr`, arr);
-    ret = Math.max(...arr);
+  for (let i = 0; i < maxIdx; i++) {
+    const x = height.shift();
+    const arr = height.map((item, idx) => (x < item ? x : item) * (idx + 1));
+    ret = Math.max(ret, ...arr);
   }
 
   return ret;
 };
 
-maxArea([1, 8, 6, 2, 5, 4, 8, 3, 7]);
+// [2, 3, 10, 5, 7, 8, 9]
+// [1,2,1]
+// [1,2]
+// maxArea([1, 8, 6, 2, 5, 4, 8, 3, 7]);
 // @lc code=end
