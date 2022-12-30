@@ -65,13 +65,74 @@
 //   return ret;
 // };
 
+// var maxArea = function (height) {
+//   const maxIdx = height.length - 1;
+//   let ret = 0;
+//   for (let i = 0; i < maxIdx; i++) {
+//     const x = height.shift();
+//     const arr = height.map((item, idx) => (x < item ? x : item) * (idx + 1));
+//     ret = Math.max(ret, ...arr);
+//   }
+
+//   return ret;
+// };
+
+// var maxArea = function (height) {
+//   const len = height.length;
+//   let ret = 0;
+//   for (let w = 1; w < len; w++) {
+//     const hs = [];
+//     for (let j = 0; j < len - w; j++) {
+//       hs.push(Math.min(height[j], height[j + w]));
+//     }
+//     // console.log(`🚀 ~ maxArea ~ hs`, hs);
+//     const h = Math.max(...hs);
+
+//     ret = Math.max(ret, w * h);
+
+//     // height = height.map((item, idx) => {
+//     //   return Math.min(item, height[idx + 1]);
+//     // });
+//     // height.pop();
+//     // console.log(`🚀 ~ maxArea ~ height`, height);
+//     // const h = Math.max(...height);
+//     // ret = Math.max(ret, w * h);
+//   }
+
+//   return ret;
+// };
+
+// var maxArea = function (height) {
+//   const len = height.length;
+//   let ret = 0;
+//   for (let w = 1; w < len; w++) {
+//     let h = 0;
+//     for (let j = 0; j < len - w; j++) {
+//       h = Math.max(Math.min(height[j], height[j + w]), h);
+//     }
+//     ret = Math.max(ret, w * h);
+//   }
+
+//   return ret;
+// };
+
 var maxArea = function (height) {
-  const maxIdx = height.length - 1;
   let ret = 0;
-  for (let i = 0; i < maxIdx; i++) {
-    const x = height.shift();
-    const arr = height.map((item, idx) => (x < item ? x : item) * (idx + 1));
-    ret = Math.max(ret, ...arr);
+  const len = height.length;
+  let w = len - 1;
+  let x1 = 0;
+  let x2 = len - 1;
+
+  while (w > 0) {
+    // const area = w * Math.min(height[x1], height[x2]);
+    // ret = Math.max(area, ret);
+    // h1 > h2 ? x2-- : x1++;
+    // w--;
+
+    ret =
+      height[x1] < height[x2]
+        ? Math.max(ret, height[x1++] * w--)
+        : Math.max(ret, height[x2--] * w--);
   }
 
   return ret;
