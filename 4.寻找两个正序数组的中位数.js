@@ -97,48 +97,6 @@
 //   }
 // };
 
-// []新拼接数组,找到中间指针
-// 判断两个指针所在的子数组
-// 比较大小换位
-var findMedianSortedArrays = function (nums1, nums2) {
-  const len1 = nums1.length;
-  const len2 = nums2.length;
-  const len = len1 + len2;
-  // const nums = nums1[0] < nums2[0] ? nums1.concat(nums2) : nums2.concat(nums1);
-  // let idx1 = len1 % 2 ? (len1 - 1) / 2 : len1 / 2 - 1;
-  // let idx2 = (len1 % 2 ? len1 - 1 : len1) + (len2 % 2 ? (len2 - 1) / 2 : len2 / 2);
-  if (len % 2) {
-    // 奇数
-    const idx = (len - 1) / 2;
-    if (idx < len1 - 1) {
-      // 左边
-      //
-    } else {
-      // 右边
-      //
-    }
-    // while (nums[idx1] !== nums[idx2]) {
-    //   if (nums[idx1] < nums[idx2 - 1]) {
-    //     idx1 += 1;
-    //   } else if (nums[idx1 + 1] < nums[idx2]) {
-    //     idx2 -= 1;
-    //   } else {
-    //   }
-    // }
-    return nums[idx1];
-  } else {
-    while (nums[idx1 + 1] !== nums[idx2]) {
-      if (nums[idx1] < nums[idx2 - 1]) {
-        idx1 += 1;
-      } else if (nums[idx1 + 1] < nums[idx2]) {
-        idx2 -= 1;
-      } else {
-      }
-    }
-    return (nums[idx1] + nums[idx2]) / 2;
-  }
-};
-
 // [未通过]先笼统找出两个数组的保底项(偶数中间两项/奇数中间三项)
 // [1, 2]\n[3, 4, 5, 6, 7, 8, 9];
 // var findMedianItems = function (arr) {
@@ -168,6 +126,51 @@ var findMedianSortedArrays = function (nums1, nums2) {
 //       return (arr[2] + arr[3]) / 2;
 //   }
 // };
+
+// []找到中间指针索引
+// 从小到大去除素组元素,直到找到中间索引大小对应值
+var findMedianSortedArrays = function (nums1, nums2) {
+  const len = nums1.length + nums2.length;
+
+  if (len % 2) {
+    const pos = (len + 1) / 2;
+    let n = 0,
+      num;
+    while (n < pos) {
+      if (nums1[0] < nums2[0]) {
+        num = nums1.shift();
+      } else if (nums1[0] > nums2[0]) {
+        num = nums2.shift();
+      } else {
+        num = nums1.length > nums2.length ? nums1.shift() : nums2.shift();
+      }
+      n++;
+    }
+
+    return num;
+  } else {
+    const pos1 = len / 2;
+    const pos2 = len / 2 + 1;
+    let n = 0,
+      num,
+      num1,
+      num2;
+    while (n < pos2) {
+      if (nums1[0] < nums2[0]) {
+        num = nums1.shift();
+      } else if (nums1[0] > nums2[0]) {
+        num = nums2.shift();
+      } else {
+        num = nums1.length > nums2.length ? nums1.shift() : nums2.shift();
+      }
+      n++;
+      if (n === pos1) num1 = num;
+      if (n === pos2) num2 = num;
+    }
+
+    return (num1 + num2) / 2;
+  }
+};
 
 // [1,2,5]\n[3,4]
 // [1,2,5,6]\n[3,4]
