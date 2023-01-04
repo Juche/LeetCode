@@ -251,66 +251,37 @@ var findMedianSortedArrays = function (nums1, nums2) {
 
   let i = 0,
     j = 0,
-    k = len % 2 ? (len - 1) / 2 : len / 2 - 1;
-
+    k = len % 2 ? (len - 1) / 2 : len1 > len2 ? len / 2 + 1 : len / 2;
+  let pre,
+    cur = nums1[0] > nums2[0] ? nums2[0] : nums1[0];
   while (i + j < k) {
-    // if (nums1[i] >= nums2[j] && nums2[j + 1]) {
-    //   j++;
-    // } else if (nums2[j] > nums1[i] && nums1[i + 1]) {
-    //   i++;
-    // } else {
-    //   len1 - i > len2 - j ? i++ : j++;
-    // }
-
-    // nums1[i] >= nums2[j] && nums2[j + 1] ? j++ : nums1[i + 1] ? i++ : j++;
-    if (len1 - i > 1 && len2 - j > 1) {
-      nums1[i] >= nums2[j] ? j++ : i++;
-    } else if (len1 - i > 1) {
-      i++;
+    if (len1 > i + 1 && len2 > j + 1) {
+      pre = cur;
+      cur =
+        nums1[i] >= nums2[j + 1] ? nums2[j++] : nums1[i + 1] <= nums2[j] ? nums1[i++] : nums2[j++];
+      console.log(`🚀 ~ findMedianSortedArrays ~ cur`, cur);
     } else {
-      j++;
+      pre = nums1[i] < nums2[j] ? nums1[i] : nums2[j];
+      cur = len1 > i + 1 ? nums1[i++] : nums2[j++];
     }
+    // else if (len1 > i + 1) {
+    //   pre = nums1[i] < nums2[j] ? nums1[i] : nums2[j];
+    //   cur = nums1[i++];
+    // } else if (len2 > j + 1) {
+    //   pre = nums1[i] < nums2[j] ? nums1[i] : nums2[j];
+    //   cur = nums2[j++];
+    // }
   }
 
+  console.log(`🚀 ~ findMedianSortedArrays ~ cur`, cur);
+  console.log(`🚀 ~ findMedianSortedArrays ~ pre`, pre);
   console.log(`🚀 ~ findMedianSortedArrays ~ i`, i);
   console.log(`🚀 ~ findMedianSortedArrays ~ j`, j);
   console.log(`----------`);
 
-  if (len % 2) {
-    return nums1[i] && nums1[i] > nums2[j] ? nums2[j] : nums1[i];
-  } else {
-    if (i < len1 && j < len2) {
-      return (nums1[i] + nums2[j]) / 2;
-    } else if (i < len1) {
-      return (nums1[i] + (nums1[i - 1] || nums2[len2 - 1])) / 2;
-    } else {
-      return (nums2[j] + (nums2[j - 1] || nums1[len1 - 1])) / 2;
-    }
-  }
+  return len % 2 ? cur : (pre + cur) / 2;
 };
 
-// []\n[1]
-// \n[1]\n[]
-// \n[1]\n[2,3]
-// \n[1,2]\n[3]
-// \n[3]\n[-2, -1]
-// \n[1,3]\n[2]
-// \n[1,2,5]\n[3,4]
-// \n[1,3,5,7,9]\n[2,4,6,8]
+// TODO: 最小和最大值进行包夹
 
-// [1]\n[3]
-// \n[1,2]\n[]
-// \n[]\n[3,4]
-// \n[1,2]\n[3,4]
-// \n[1]\n[2,3,4]
-// \n[1,2,5,6]\n[3,4]
-// \n[1,3,5,7,9]\n[2,4,6,8,10,11,12,13,14,15,16]
-
-// \n[]\n[1]
-// \n[]\n[3,4]
-
-// \n[]\n[1,2,3]
-// \n[]\n[1,2,3,4]
-// \n[0,0]\n[0,0]
-// \n[0,0,0,0,0]\n[-1,0,0,0,0,0,1]
 // @lc code=end
