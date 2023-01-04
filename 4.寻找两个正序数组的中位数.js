@@ -127,52 +127,190 @@
 //   }
 // };
 
-// []找到中间指针索引
+// [通过]找到中间指针索引
 // 从小到大去除素组元素,直到找到中间索引大小对应值
+// var findMedianSortedArrays = function (nums1, nums2) {
+//   const len = nums1.length + nums2.length;
+
+//   if (len % 2) {
+//     const pos = (len + 1) / 2;
+//     let n = 0,
+//       num;
+//     while (n < pos) {
+//       if (nums1[0] < nums2[0]) {
+//         num = nums1.shift();
+//       } else if (nums1[0] > nums2[0]) {
+//         num = nums2.shift();
+//       } else {
+//         num = nums1.length > nums2.length ? nums1.shift() : nums2.shift();
+//       }
+//       n++;
+//     }
+
+//     return num;
+//   } else {
+//     const pos1 = len / 2;
+//     const pos2 = len / 2 + 1;
+//     let n = 0,
+//       num,
+//       num1,
+//       num2;
+//     while (n < pos2) {
+//       if (nums1[0] < nums2[0]) {
+//         num = nums1.shift();
+//       } else if (nums1[0] > nums2[0]) {
+//         num = nums2.shift();
+//       } else {
+//         num = nums1.length > nums2.length ? nums1.shift() : nums2.shift();
+//       }
+//       n++;
+//       if (n === pos1) num1 = num;
+//       if (n === pos2) num2 = num;
+//     }
+
+//     return (num1 + num2) / 2;
+//   }
+// };
+
+// [有点问题]找到中间指针索引
+// 通过递增对应索引直到找到中间索引大小对应值
+// let i = len1 % 2 ? (len1 - 1) / 2 : len1 / 2 - 1,
+//   j = len2 % 2 ? (len2 - 1) / 2 : len2 / 2 - 1,
+//   k = len % 2 ? (len + 1) / 2 : len / 2;
+// var findMedianSortedArrays = function (nums1, nums2) {
+//   const len1 = nums1.length;
+//   const len2 = nums2.length;
+//   if (!len1) return len2 % 2 ? nums2[(len2 - 1) / 2] : (nums2[len2 / 2 - 1] + nums2[len2 / 2]) / 2;
+
+//   if (!len2) return len1 % 2 ? nums1[(len1 - 1) / 2] : (nums1[len1 / 2 - 1] + nums1[len1 / 2]) / 2;
+
+//   const len = len1 + len2;
+
+//   if (len === 2) return (nums1[0] + nums2[0]) / 2;
+
+//   if (len === 3) return [...nums1, ...nums2].sort((pre, next) => pre - next)[1];
+
+//   let i = 0,
+//     j = 0,
+//     cur;
+//   if (len % 2) {
+//     while (i + j < (len + 1) / 2) {
+//       cur =
+//         nums1[i] === nums2[j]
+//           ? nums1[i + 1]
+//             ? nums1[i++]
+//             : nums2[j++]
+//           : nums1[i] > nums2[j]
+//           ? nums2[j++]
+//           : nums1[i++];
+//     }
+
+//     return cur;
+//   } else {
+//     let pre;
+//     while (i + j < len / 2 + 1) {
+//       pre = cur;
+
+//       cur =
+//         nums1[i] === nums2[j]
+//           ? nums1[i + 1]
+//             ? nums1[i++]
+//             : nums2[j++]
+//           : nums1[i] > nums2[j]
+//           ? nums2[j++]
+//           : nums1[i++];
+//       // if(nums1[i] > nums2[j]) j++
+//       // if(nums1[i] < nums2[j]) i++
+//       // if(nums1[i+1]) i++
+//       // if(nums1[j+1]) j++
+//     }
+
+//     console.log(`🚀 ~ findMedianSortedArrays ~ i`, i);
+//     console.log(`🚀 ~ findMedianSortedArrays ~ j`, j);
+//     console.log(`🚀 ~ findMedianSortedArrays ~ cur`, cur);
+//     console.log(`🚀 ~ findMedianSortedArrays ~ pre`, pre);
+//     cur = cur === 0 ? cur : cur || nums1[i] || nums2[j];
+//     return (pre + cur) / 2;
+//   }
+// };
+
+// []找到中间指针索引
+// 通过递增对应索引直到找到中间索引大小对应值
 var findMedianSortedArrays = function (nums1, nums2) {
-  const len = nums1.length + nums2.length;
+  const len1 = nums1.length;
+  const len2 = nums2.length;
+  if (!len1) return len2 % 2 ? nums2[(len2 - 1) / 2] : (nums2[len2 / 2 - 1] + nums2[len2 / 2]) / 2;
+
+  if (!len2) return len1 % 2 ? nums1[(len1 - 1) / 2] : (nums1[len1 / 2 - 1] + nums1[len1 / 2]) / 2;
+
+  const len = len1 + len2;
+
+  if (len === 2) return (nums1[0] + nums2[0]) / 2;
+
+  // if (len === 3) return [...nums1, ...nums2].sort((pre, next) => pre - next)[1];
+
+  let i = 0,
+    j = 0,
+    k = len % 2 ? (len - 1) / 2 : len / 2 - 1;
+
+  while (i + j < k) {
+    // if (nums1[i] >= nums2[j] && nums2[j + 1]) {
+    //   j++;
+    // } else if (nums2[j] > nums1[i] && nums1[i + 1]) {
+    //   i++;
+    // } else {
+    //   len1 - i > len2 - j ? i++ : j++;
+    // }
+
+    // nums1[i] >= nums2[j] && nums2[j + 1] ? j++ : nums1[i + 1] ? i++ : j++;
+    if (len1 - i > 1 && len2 - j > 1) {
+      nums1[i] >= nums2[j] ? j++ : i++;
+    } else if (len1 - i > 1) {
+      i++;
+    } else {
+      j++;
+    }
+  }
+
+  console.log(`🚀 ~ findMedianSortedArrays ~ i`, i);
+  console.log(`🚀 ~ findMedianSortedArrays ~ j`, j);
+  console.log(`----------`);
 
   if (len % 2) {
-    const pos = (len + 1) / 2;
-    let n = 0,
-      num;
-    while (n < pos) {
-      if (nums1[0] < nums2[0]) {
-        num = nums1.shift();
-      } else if (nums1[0] > nums2[0]) {
-        num = nums2.shift();
-      } else {
-        num = nums1.length > nums2.length ? nums1.shift() : nums2.shift();
-      }
-      n++;
-    }
-
-    return num;
+    return nums1[i] && nums1[i] > nums2[j] ? nums2[j] : nums1[i];
   } else {
-    const pos1 = len / 2;
-    const pos2 = len / 2 + 1;
-    let n = 0,
-      num,
-      num1,
-      num2;
-    while (n < pos2) {
-      if (nums1[0] < nums2[0]) {
-        num = nums1.shift();
-      } else if (nums1[0] > nums2[0]) {
-        num = nums2.shift();
-      } else {
-        num = nums1.length > nums2.length ? nums1.shift() : nums2.shift();
-      }
-      n++;
-      if (n === pos1) num1 = num;
-      if (n === pos2) num2 = num;
+    if (i < len1 && j < len2) {
+      return (nums1[i] + nums2[j]) / 2;
+    } else if (i < len1) {
+      return (nums1[i] + (nums1[i - 1] || nums2[len2 - 1])) / 2;
+    } else {
+      return (nums2[j] + (nums2[j - 1] || nums1[len1 - 1])) / 2;
     }
-
-    return (num1 + num2) / 2;
   }
 };
 
-// [1,2,5]\n[3,4]
-// [1,2,5,6]\n[3,4]
-// [1,3,5,7,9]\n[2,4,6,8]
+// []\n[1]
+// \n[1]\n[]
+// \n[1]\n[2,3]
+// \n[1,2]\n[3]
+// \n[3]\n[-2, -1]
+// \n[1,3]\n[2]
+// \n[1,2,5]\n[3,4]
+// \n[1,3,5,7,9]\n[2,4,6,8]
+
+// [1]\n[3]
+// \n[1,2]\n[]
+// \n[]\n[3,4]
+// \n[1,2]\n[3,4]
+// \n[1]\n[2,3,4]
+// \n[1,2,5,6]\n[3,4]
+// \n[1,3,5,7,9]\n[2,4,6,8,10,11,12,13,14,15,16]
+
+// \n[]\n[1]
+// \n[]\n[3,4]
+
+// \n[]\n[1,2,3]
+// \n[]\n[1,2,3,4]
+// \n[0,0]\n[0,0]
+// \n[0,0,0,0,0]\n[-1,0,0,0,0,0,1]
 // @lc code=end
