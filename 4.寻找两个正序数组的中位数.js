@@ -234,8 +234,63 @@
 //   }
 // };
 
-// []找到中间指针索引
+// [有点乱]找到中间指针索引
 // 通过递增对应索引直到找到中间索引大小对应值
+// var findMedianSortedArrays = function (nums1, nums2) {
+//   const len1 = nums1.length;
+//   const len2 = nums2.length;
+//   if (!len1) return len2 % 2 ? nums2[(len2 - 1) / 2] : (nums2[len2 / 2 - 1] + nums2[len2 / 2]) / 2;
+
+//   if (!len2) return len1 % 2 ? nums1[(len1 - 1) / 2] : (nums1[len1 / 2 - 1] + nums1[len1 / 2]) / 2;
+
+//   const len = len1 + len2;
+
+//   if (len === 2) return (nums1[0] + nums2[0]) / 2;
+
+//   if (len === 3) return [...nums1, ...nums2].sort((pre, next) => pre - next)[1];
+
+//   let i = 0,
+//     j = 0,
+//     k = len % 2 ? (len - 1) / 2 : len1 > len2 ? len / 2 + 1 : len / 2;
+//   // k = len % 2 ? (len - 1) / 2 : len / 2 + 1;
+//   let pre,
+//     cur = nums1[0] > nums2[0] ? nums2[0] : nums1[0];
+//   while (i + j < k) {
+//     pre = cur;
+//     if (len1 > i + 1 && len2 > j + 1) {
+//       cur =
+//         nums1[i] >= nums2[j + 1] ? nums2[j++] : nums1[i + 1] <= nums2[j] ? nums1[i++] : nums2[j++];
+//       console.log(`🚀 ~ findMedianSortedArrays ~ cur`, cur);
+//     } else {
+//       // pre = nums1[i] < nums2[j] ? nums1[i] : nums2[j];
+//       cur = len1 > i + 1 ? nums1[i++] : nums2[j++];
+//     }
+//     // else if (len1 > i + 1) {
+//     //   pre = nums1[i] < nums2[j] ? nums1[i] : nums2[j];
+//     //   cur = nums1[i++];
+//     // } else if (len2 > j + 1) {
+//     //   pre = nums1[i] < nums2[j] ? nums1[i] : nums2[j];
+//     //   cur = nums2[j++];
+//     // }
+//   }
+
+//   console.log(`🚀 ~ findMedianSortedArrays ~ cur`, cur);
+//   console.log(`🚀 ~ findMedianSortedArrays ~ pre`, pre);
+//   console.log(`🚀 ~ findMedianSortedArrays ~ i`, i);
+//   console.log(`🚀 ~ findMedianSortedArrays ~ j`, j);
+//   console.log(`----------`);
+
+//   return len % 2 ? cur : (pre + cur) / 2;
+// };
+
+// TODO: 最小和最大值进行包夹
+
+// console.log(`🚀 ~ findMedianSortedArrays ~ l1`, l1);
+// console.log(`🚀 ~ findMedianSortedArrays ~ r1`, r1);
+// console.log(`🚀 ~ findMedianSortedArrays ~ l2`, l2);
+// console.log(`🚀 ~ findMedianSortedArrays ~ r2`, r2);
+// console.log(`++++++++++`);
+
 var findMedianSortedArrays = function (nums1, nums2) {
   const len1 = nums1.length;
   const len2 = nums2.length;
@@ -247,41 +302,94 @@ var findMedianSortedArrays = function (nums1, nums2) {
 
   if (len === 2) return (nums1[0] + nums2[0]) / 2;
 
-  // if (len === 3) return [...nums1, ...nums2].sort((pre, next) => pre - next)[1];
+  if (len === 3) return [...nums1, ...nums2].sort((pre, next) => pre - next)[1];
 
-  let i = 0,
-    j = 0,
-    k = len % 2 ? (len - 1) / 2 : len1 > len2 ? len / 2 + 1 : len / 2;
-  let pre,
-    cur = nums1[0] > nums2[0] ? nums2[0] : nums1[0];
-  while (i + j < k) {
-    if (len1 > i + 1 && len2 > j + 1) {
-      pre = cur;
-      cur =
-        nums1[i] >= nums2[j + 1] ? nums2[j++] : nums1[i + 1] <= nums2[j] ? nums1[i++] : nums2[j++];
-      console.log(`🚀 ~ findMedianSortedArrays ~ cur`, cur);
-    } else {
-      pre = nums1[i] < nums2[j] ? nums1[i] : nums2[j];
-      cur = len1 > i + 1 ? nums1[i++] : nums2[j++];
-    }
-    // else if (len1 > i + 1) {
-    //   pre = nums1[i] < nums2[j] ? nums1[i] : nums2[j];
-    //   cur = nums1[i++];
-    // } else if (len2 > j + 1) {
-    //   pre = nums1[i] < nums2[j] ? nums1[i] : nums2[j];
-    //   cur = nums2[j++];
-    // }
+  let l1 = 0,
+    l2 = 0,
+    r1 = len1 - 1,
+    r2 = len2 - 1;
+  // k = len % 2 ? (len + 1) / 2 : len / 2 + 1;
+
+  while (l1 < r1 && l2 < r2) {
+    nums1[l1] < nums2[l2] ? l1++ : l2++;
+    l1 < r1 && nums1[r1] > nums2[r2] ? r1-- : r2--;
   }
 
-  console.log(`🚀 ~ findMedianSortedArrays ~ cur`, cur);
-  console.log(`🚀 ~ findMedianSortedArrays ~ pre`, pre);
-  console.log(`🚀 ~ findMedianSortedArrays ~ i`, i);
-  console.log(`🚀 ~ findMedianSortedArrays ~ j`, j);
-  console.log(`----------`);
+  console.log(`🚀 ~ findMedianSortedArrays ~ l1`, l1);
+  console.log(`🚀 ~ findMedianSortedArrays ~ r1`, r1);
+  console.log(`🚀 ~ findMedianSortedArrays ~ l2`, l2);
+  console.log(`🚀 ~ findMedianSortedArrays ~ r2`, r2);
 
-  return len % 2 ? cur : (pre + cur) / 2;
+  if (r1 > l1) {
+    if (nums2[l2] < nums1[l1] || nums2[l2] > nums1[r1]) {
+      return len % 2
+        ? // len 奇
+          nums1[(r1 - l1 - 1 + l2) / 2]
+        : // len 偶
+          (nums1[(r1 - l1 - 1 + l2) / 2] + nums1[(r1 - l1 - 1 + l2) / 2 + 1]) / 2;
+    }
+
+    let goOn = true;
+    while (r1 > l1 + 1 && goOn) {
+      if (nums2[l2] < nums1[l1] || nums2[l2] > nums1[r1]) {
+        goOn = false;
+        return len % 2
+          ? // len 奇
+            nums1[(r1 - l1 - 1 + l2) / 2]
+          : // len 偶
+            (nums1[(r1 - l1 - 1 + l2) / 2] + nums1[(r1 - l1 - 1 + l2) / 2 + 1]) / 2;
+      }
+      nums2[l2] > nums1[l2] && l1++;
+      nums2[l2] < nums1[r2] && r1--;
+    }
+
+    return len % 2
+      ? // len 奇
+        l1 + l2 === (len - 1) / 2 - 1
+        ? nums2[l2]
+        : l1 + l2 === (len - 1) / 2
+        ? nums1[l1]
+        : nums1[r1]
+      : // len 偶
+        (nums2[l2] + nums1[l1]) / 2;
+  }
+
+  if (r2 > l2) {
+    if (nums1[l1] < nums2[l2] || nums1[l1] > nums2[r2]) {
+      return len % 2
+        ? // len 奇
+          nums2[(r2 - l2 - 1 + l1) / 2]
+        : // len 偶
+          (nums2[(r2 - l2 - 1 + l1) / 2] + nums2[(r2 - l2 - 1 + l1) / 2 + 1]) / 2;
+    }
+
+    let goOn = true;
+    while (r2 > l2 + 1 && goOn) {
+      if (nums1[l1] < nums2[l2] || nums1[l1] > nums2[r2]) {
+        goOn = false;
+        return len % 2
+          ? // len 奇
+            nums2[(r2 - l2 - 1 + l1) / 2]
+          : // len 偶
+            (nums2[(r2 - l2 - 1 + l1) / 2] + nums2[(r2 - l2 - 1 + l1) / 2 + 1]) / 2;
+      }
+      nums1[l1] > nums2[l2] && l2++;
+      nums1[l1] < nums2[r2] && r2--;
+    }
+
+    console.log(`🚀 ~ findMedianSortedArrays ~ l1`, l1);
+    console.log(`🚀 ~ findMedianSortedArrays ~ l2`, l2);
+    console.log(`🚀 ~ findMedianSortedArrays ~ len`, len);
+    return len % 2
+      ? // len 奇
+        l1 + l2 === (len - 1) / 2 - 1
+        ? nums1[l1]
+        : l1 + l2 === (len - 1) / 2
+        ? nums2[l2]
+        : nums2[r2]
+      : // len 偶
+        (nums2[l2] + nums1[l1]) / 2;
+  }
 };
-
-// TODO: 最小和最大值进行包夹
 
 // @lc code=end
