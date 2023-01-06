@@ -546,11 +546,11 @@ var findMedianSortedArrays = function (nums1, nums2) {
   if (len === 2) return (nums1[0] + nums2[0]) / 2;
   if (len === 3) return [...nums1, ...nums2].sort((pre, next) => pre - next)[1];
 
-  let i = 0,
+  let loop = true,
+    i = 0,
     j = 0,
     k = len % 2 ? (len - 3) / 2 : len / 2 - 1;
 
-  let loop = true;
   do {
     nums1[i] < nums2[j] ? i++ : j++;
     k--;
