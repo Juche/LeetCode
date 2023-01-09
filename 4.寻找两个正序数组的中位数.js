@@ -534,52 +534,120 @@
 //   return len % 2 ? mid3[1] : (mid3[0] + mid3[1]) / 2;
 // };
 
+// // [通过] 先筛选 nums1, 再筛选 nums2,最后处理特例
+// // 代码优化
+// var findMedianSortedArrays = function (nums1, nums2) {
+//   const len1 = nums1.length;
+//   const len2 = nums2.length;
+//   if (!len1) return len2 % 2 ? nums2[(len2 - 1) / 2] : (nums2[len2 / 2 - 1] + nums2[len2 / 2]) / 2;
+//   if (!len2) return len1 % 2 ? nums1[(len1 - 1) / 2] : (nums1[len1 / 2 - 1] + nums1[len1 / 2]) / 2;
+
+//   const len = len1 + len2;
+//   if (len === 2) return (nums1[0] + nums2[0]) / 2;
+//   if (len === 3) return [...nums1, ...nums2].sort((pre, next) => pre - next)[1];
+
+//   let loop = true,
+//     i = 0,
+//     j = 0,
+//     k = len % 2 ? (len - 3) / 2 : len / 2 - 1;
+
+//   do {
+//     nums1[i] < nums2[j] ? i++ : j++;
+//     k--;
+//     if (nums1[i] >= nums2[len2 - 1] || nums1[len1 - 1] <= nums2[j]) loop = false;
+//   } while (i < len1 - 1 && loop && k);
+
+//   if (!loop) {
+//     const nums =
+//       nums1[i] >= nums2[len2 - 1]
+//         ? [...nums2.splice(j), ...nums1.splice(i)]
+//         : [...nums1.splice(i), ...nums2.splice(j)];
+//     return len % 2 ? nums[k + 1] : (nums[k] + nums[k + 1]) / 2;
+//   }
+
+//   if (k) j += k;
+
+//   const mid3 = [
+//     nums2[j - 1] > nums1[i] ? nums2[j - 1] : nums1[i],
+//     nums2[j],
+//     nums1[i] < nums2[j] ? nums1[i + 1] : nums2[j + 1],
+//   ].sort((pre, next) => pre - next);
+
+//   console.log(`🚀`, JSON.stringify(nums1), JSON.stringify(nums2));
+//   console.log(`🚀 ~ findMedianSortedArrays ~ i`, i);
+//   console.log(`🚀 ~ findMedianSortedArrays ~ j`, j);
+//   console.log(`🚀 ~ findMedianSortedArrays ~ k`, k);
+//   console.log(`🚀 ~ findMedianSortedArrays ~ mid3`, mid3);
+
+//   return len % 2 ? mid3[1] : (mid3[0] + mid3[1]) / 2;
+// };
+
 // [通过] 先筛选 nums1, 再筛选 nums2,最后处理特例
 // 代码优化
 var findMedianSortedArrays = function (nums1, nums2) {
   const len1 = nums1.length;
   const len2 = nums2.length;
-  if (!len1) return len2 % 2 ? nums2[(len2 - 1) / 2] : (nums2[len2 / 2 - 1] + nums2[len2 / 2]) / 2;
-  if (!len2) return len1 % 2 ? nums1[(len1 - 1) / 2] : (nums1[len1 / 2 - 1] + nums1[len1 / 2]) / 2;
+  if (len1 === 0)
+    return len2 % 2 ? nums2[(len2 - 1) / 2] : (nums2[len2 / 2 - 1] + nums2[len2 / 2]) / 2;
+  if (len2 === 0)
+    return len1 % 2 ? nums1[(len1 - 1) / 2] : (nums1[len1 / 2 - 1] + nums1[len1 / 2]) / 2;
 
   const len = len1 + len2;
   if (len === 2) return (nums1[0] + nums2[0]) / 2;
   if (len === 3) return [...nums1, ...nums2].sort((pre, next) => pre - next)[1];
 
-  let loop = true,
-    i = 0,
+  let i = 0,
     j = 0,
     k = len % 2 ? (len - 3) / 2 : len / 2 - 1;
 
-  do {
+  for (; i < len1 - 1; ) {
     nums1[i] < nums2[j] ? i++ : j++;
     k--;
-    if (nums1[i] >= nums2[len2 - 1] || nums1[len1 - 1] <= nums2[j]) loop = false;
-  } while (i < len1 - 1 && loop && k);
 
-  if (!loop) {
-    const nums =
-      nums1[i] >= nums2[len2 - 1]
-        ? [...nums2.splice(j), ...nums1.splice(i)]
-        : [...nums1.splice(i), ...nums2.splice(j)];
-    return len % 2 ? nums[k + 1] : (nums[k] + nums[k + 1]) / 2;
+    if (nums1[i] >= nums2[len2 - 1]) {
+      if (len2 + i > len / 2) {
+        return len % 2
+          ? nums2[(len - 1) / 2 - i]
+          : (nums2[len / 2 - 1 - i] + nums2[len / 2 - i]) / 2;
+      } else if (len2 + i === len / 2) {
+        return (nums2[len2 - 1] + nums1[i]) / 2;
+      } else {
+        return len % 2
+          ? nums1[(len - 1) / 2 - len2]
+          : (nums1[len / 2 - 1 - len2] + nums1[len / 2 - len2]) / 2;
+      }
+    }
+    if (nums1[len1 - 1] <= nums2[j]) {
+      if (len1 + j > len / 2) {
+        return len % 2
+          ? nums1[(len - 1) / 2 - j]
+          : (nums1[len / 2 - 1 - j] + nums1[len / 2 - j]) / 2;
+      } else if (len1 + j === len / 2) {
+        return (nums1[len1 - 1] + nums2[j]) / 2;
+      } else {
+        return len % 2
+          ? nums2[(len - 1) / 2 - len1]
+          : (nums2[len / 2 - 1 - len1] + nums2[len / 2 - len1]) / 2;
+      }
+    }
+
+    if (i === len - 1 || k === 0) break;
   }
 
-  if (k) j += k;
-
+  j += k;
   const mid3 = [
     nums2[j - 1] > nums1[i] ? nums2[j - 1] : nums1[i],
     nums2[j],
     nums1[i] < nums2[j] ? nums1[i + 1] : nums2[j + 1],
   ].sort((pre, next) => pre - next);
 
-  console.log(`🚀`, JSON.stringify(nums1), JSON.stringify(nums2));
-  console.log(`🚀 ~ findMedianSortedArrays ~ i`, i);
-  console.log(`🚀 ~ findMedianSortedArrays ~ j`, j);
-  console.log(`🚀 ~ findMedianSortedArrays ~ k`, k);
-  console.log(`🚀 ~ findMedianSortedArrays ~ mid3`, mid3);
-
   return len % 2 ? mid3[1] : (mid3[0] + mid3[1]) / 2;
 };
+
+// console.log(`🚀`, JSON.stringify(nums1), JSON.stringify(nums2));
+// console.log(`🚀 ~ findMedianSortedArrays ~ i`, i);
+// console.log(`🚀 ~ findMedianSortedArrays ~ j`, j);
+// console.log(`🚀 ~ findMedianSortedArrays ~ k`, k);
+// console.log(`🚀 ~ findMedianSortedArrays ~ mid3`, mid3);
 
 // @lc code=end
