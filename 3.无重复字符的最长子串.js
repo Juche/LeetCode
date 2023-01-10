@@ -133,26 +133,46 @@
 //   return gap;
 // };
 
-var lengthOfLongestSubstring = function (s) {
-  if (s.length < 2) return s.length;
+// var lengthOfLongestSubstring = function (s) {
+//   if (s.length < 2) return s.length;
 
+//   let gap = 0,
+//     i = 0,
+//     len = s.length,
+//     subStr = '';
+
+//   while (len > i) {
+//     console.log(`🚀 ~ lengthOfLongestSubstring ~ i`, i);
+//     const charIdx = subStr.indexOf(s[i]);
+//     subStr += s[i];
+//     i++;
+//     console.log(`🚀 ~ lengthOfLongestSubstring ~ charIdx`, charIdx);
+//     console.log(`🚀 ~ lengthOfLongestSubstring ~ subStr`, subStr);
+//     if (charIdx === -1) {
+//       gap = subStr.length > gap ? subStr.length : gap;
+//       console.log(`🚀 ~ lengthOfLongestSubstring ~ gap`, gap);
+//     } else {
+//       subStr = subStr.substr(charIdx + 1);
+//       // if (charIdx > 0) i += charIdx - 1;
+//     }
+//   }
+//   return gap;
+// };
+
+var lengthOfLongestSubstring = function (s) {
   let gap = 0,
     i = 0,
-    len = s.length,
     subStr = '';
 
-  while (len > i) {
+  while (s.length > i) {
     const charIdx = subStr.indexOf(s[i]);
     subStr += s[i];
-    i++;
     if (charIdx === -1) {
       gap = subStr.length > gap ? subStr.length : gap;
-      console.log(`🚀 ~ lengthOfLongestSubstring ~ gap`, gap);
-      console.log(`🚀 ~ lengthOfLongestSubstring ~ subStr`, subStr);
     } else {
       subStr = subStr.substr(charIdx + 1);
-      if (charIdx > 0) i += charIdx - 1;
     }
+    i++;
   }
   return gap;
 };
