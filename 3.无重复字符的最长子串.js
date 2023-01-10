@@ -84,31 +84,75 @@
 //   return gap;
 // };
 
+// var lengthOfLongestSubstring = function (s) {
+//   if (s.length < 2) return s.length;
+
+//   let gap = 0,
+//     i = 0,
+//     len = s.length,
+//     charMap = new Map();
+
+//   while (len > i) {
+//     if (charMap.has(s[i])) {
+//       if (gap) {
+//         const _gap = i - charMap.get(s[i]);
+//         if (_gap > gap) gap = _gap;
+//       } else {
+//         gap = i - charMap.get(s[i]);
+//       }
+//     }
+//     charMap.set(s[i], i);
+//     console.log(`🚀 ~ lengthOfLongestSubstring ~ charMap`, charMap);
+//     i++;
+//   }
+//   return gap;
+// };
+
+// var lengthOfLongestSubstring = function (s) {
+//   if (s.length < 2) return s.length;
+
+//   let gap = 0,
+//     i = 0,
+//     len = s.length,
+//     subStr = '';
+
+//   while (len > i) {
+//     const charIdx = subStr.indexOf(s[i]);
+//     console.log(`🚀 ~ lengthOfLongestSubstring ~ i`, i);
+//     console.log(`🚀 ~ lengthOfLongestSubstring ~ charIdx`, charIdx);
+//     subStr += s[i];
+//     i++;
+//     if (charIdx === -1) {
+//       gap = subStr.length > gap ? subStr.length : gap;
+//     } else {
+//       subStr = subStr.substr(charIdx + 1);
+//       if (charIdx > 0) i += charIdx - 1;
+//     }
+//     console.log(`🚀 ~ lengthOfLongestSubstring ~ subStr`, subStr);
+//   }
+//   return gap;
+// };
+
 var lengthOfLongestSubstring = function (s) {
   if (s.length < 2) return s.length;
 
   let gap = 0,
     i = 0,
     len = s.length,
-    charMap = new Map(),
-    idxs = [];
+    subStr = '';
 
   while (len > i) {
-    if (charMap.has(s[i])) {
-      idxs.push(charMap.get(s[i]));
-      idxs.push(i);
-    }
-    charMap.set(s[i], i);
-    console.log(`🚀 ~ lengthOfLongestSubstring ~ idxs`, idxs);
-    console.log(`🚀 ~ lengthOfLongestSubstring ~ charMap`, charMap);
+    const charIdx = subStr.indexOf(s[i]);
+    subStr += s[i];
     i++;
-  }
-  // gap =
-  // idxs [ 0, 3, 1, 4, 2, 5, 6, 7 ]
-  console.log(`🚀 ~ lengthOfLongestSubstring ~ idxs`, idxs);
-  for (let i = 0; i < array.length / 2; i++) {
-    // arr[i+1] - arr[i]
-    // arr[i+2] - arr[i]
+    if (charIdx === -1) {
+      gap = subStr.length > gap ? subStr.length : gap;
+      console.log(`🚀 ~ lengthOfLongestSubstring ~ gap`, gap);
+      console.log(`🚀 ~ lengthOfLongestSubstring ~ subStr`, subStr);
+    } else {
+      subStr = subStr.substr(charIdx + 1);
+      if (charIdx > 0) i += charIdx - 1;
+    }
   }
   return gap;
 };
